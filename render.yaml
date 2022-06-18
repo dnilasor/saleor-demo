@@ -4,7 +4,7 @@ services:
     env: python
     repo: https://github.com/render-examples/saleor
     buildCommand: pip3 install -r requirements.txt
-    startCommand: gunicorn --bind :$PORT --workers 4 --worker-class uvicorn.workers.UvicornWorker saleor.asgi:application
+    startCommand: ./render-build.sh
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: saleor.settings
@@ -33,6 +33,32 @@ services:
   - name: saleor-redis
     type: redis
     ipAllowList: [] # only allow connections from services in this Render account
+
+  - name: saleor-dashboard
+    type: web
+    env: static
+    repo: https://github.com/saleor/saleor-dashboard.git
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build/
+    envVars:
+    - key: API_URI
+      value: https://saelor.onrender.com/graphql/
+    - key: APP_MOUNT_URI
+      value: /dashboard/
+    - key: STATIC_URL
+      value: /dashboard/
+
+  - name: saleor-storefront
+    type: web
+    env: node
+    repo: https://github.com/saleor/react-storefront
+    buildCommand: pnpm install && pnpm run build && pnpm run postbuild
+    startCommand: pnpm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URI
+        value: https://saelor.onrender.com/graphql/
+      - key: NEXT_PUBLIC_IMAGE_CONVERSION_FORMATS
+        value: image/avif,image/webp
 
 databases:
   - name: saleor-db
