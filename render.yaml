@@ -3,8 +3,8 @@ services:
     type: web
     env: python
     repo: https://github.com/dnilasor/saleor-demo
-    buildCommand: pip3 install -r requirements.txt
-    startCommand: ALLOWED_HOSTS="['$RENDER_EXTERNAL_HOSTNAME']" gunicorn --bind :$PORT --workers 4 --worker-class uvicorn.workers.UvicornWorker saleor.asgi:application
+    buildCommand: ./render-build.sh
+    startCommand: ALLOWED_HOSTS=['.onrender.com'] gunicorn --bind :$PORT --workers 4 --worker-class uvicorn.workers.UvicornWorker saleor.asgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: saleor.settings
@@ -68,3 +68,4 @@ services:
 databases:
   - name: saleor-db
     ipAllowList: [] # only allow connections from services in this Render account
+
