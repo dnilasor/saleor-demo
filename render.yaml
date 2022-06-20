@@ -3,7 +3,7 @@ services:
     type: web
     env: python
     repo: https://github.com/dnilasor/saleor-demo
-    buildCommand: pip3 install -r requirements.txt && python manage.py migrate --no-input
+    buildCommand: pip3 install -r requirements.txt && python manage.py migrate --no-input && python manage.py populatedb --createsuperuser
     startCommand: ALLOWED_HOSTS=".onrender.com" gunicorn --bind :$PORT --workers 4 --worker-class uvicorn.workers.UvicornWorker saleor.asgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
