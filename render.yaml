@@ -6,20 +6,6 @@ services:
     buildCommand: ./render-build.sh
     startCommand: ./render-start.sh server
     envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: saleor.settings
-      - key: DEBUG
-        value: True
-      - key: NPM_CONFIG_PRODUCTION
-        value: false
-      - key: DEFAULT_FROM_EMAIL
-        value: noreply@example.com
-      - key: ENABLE_ACCOUNT_CONFIRMATION_BY_EMAIL
-        value: False
-      - key: SECRET_KEY
-        generateValue: true
-      - key: PYTHON_VERSION
-        value: 3.9.0
       - key: DATABASE_URL
         fromDatabase:
           name: saleor-db
@@ -87,20 +73,8 @@ services:
         type: redis
         name: saelor-redis
         property: connectionString
-      - key: PYTHON_VERSION
-        value: 3.9.0
-      - key: DJANGO_SETTINGS_MODULE
-        value: saleor.settings
-      - key: DEBUG
-        value: False
-      - key: NPM_CONFIG_PRODUCTION
-        value: false
-      - key: DEFAULT_FROM_EMAIL
-        value: noreply@example.com
-      - key: ENABLE_ACCOUNT_CONFIRMATION_BY_EMAIL
-        value: False
-      - key: SECRET_KEY
-        generateValue: true
+      - key: CLOUDAMQP_URL
+        value: <you-complete-me>
 
   - type: cron
     name: exchange-rates
@@ -109,20 +83,6 @@ services:
     startCommand: python manage.py update_exchange_rates --all
     repo: https://github.com/render-examples/saleor
     envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: saleor.settings
-      - key: DEBUG
-        value: False
-      - key: NPM_CONFIG_PRODUCTION
-        value: false
-      - key: DEFAULT_FROM_EMAIL
-        value: noreply@example.com
-      - key: ENABLE_ACCOUNT_CONFIRMATION_BY_EMAIL
-        value: False
-      - key: SECRET_KEY
-        generateValue: true
-      - key: PYTHON_VERSION
-        value: 3.9.0
       - key: DATABASE_URL
         fromDatabase:
             name: saleor-db-2hex
@@ -138,4 +98,22 @@ services:
 databases:
   - name: saleor-db
     ipAllowList: [] # only allow connections from services in this Render account
+
+envVarGroups:
+  - name: saleor-settings
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: saleor.settings
+      - key: DEBUG
+        value: True
+      - key: NPM_CONFIG_PRODUCTION
+        value: false
+      - key: DEFAULT_FROM_EMAIL
+        value: noreply@example.com
+      - key: ENABLE_ACCOUNT_CONFIRMATION_BY_EMAIL
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
 
